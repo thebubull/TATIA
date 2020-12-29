@@ -9,9 +9,8 @@
 
 Le parseur prend le fichier "bookssummaries.txt" et le convertit en csv dans le fichier "data.csv".
 ### Fini ?
-[x] Oui
-
-[] Non
+- [X] Oui
+- [ ] Non
 
 ## Reste
 
