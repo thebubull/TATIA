@@ -41,7 +41,7 @@ for index, row in data.iterrows():
 
     out_list.append({
         "words": stems,
-        "genre": row[5]
+        "genre": row[5].split(';')
     })
     display_percent(index)
 
