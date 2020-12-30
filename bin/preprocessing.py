@@ -3,25 +3,11 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 import string
-import sys
+
+from bin.constants import categories, display_percent
 
 
-data = pd.read_csv("../data/data-grouped.csv", encoding="utf-8")
-count = len(data.index)
-out_list = []
-categories = ["Biography", "Comedy", "Detective Fiction", "Drama", "Fantasy", "Fiction", "Horror", "Nonfiction", "Romance", "Science Fiction", "Thriller"]
-
-
-def display_percent(i):
-    current_percent = i * 100 / count
-    sys.stdout.write("\r")
-    sys.stdout.write("[%-20s] %d%%" % ('='*int(current_percent/5), current_percent))
-    sys.stdout.flush()
-
-
-for index, row in data.iterrows():
-    summary = row[6]
-
+def summary_transform(summary):
     # 1 - Lowercase
     summary = summary.lower()
 
@@ -37,17 +23,28 @@ for index, row in data.iterrows():
 
     # 5 - Stemming
     porter = PorterStemmer()
-    stems = [porter.stem(word) for word in words]
-    #print(tokens)
+    return [porter.stem(word) for word in words]
 
-    obj = {
-        "words": stems,
-    }
-    for categorie in categories:
-        obj[categorie] = "1" if categorie in row[5] else "0"
 
-    out_list.append(obj)
-    display_percent(index)
+def preprocess_file(in_path, out_path):
+    data = pd.read_csv(in_path, encoding="utf-8")
+    count = len(data.index) - 1
+    processed_list = []
 
-out = pd.DataFrame(out_list)
-out.to_csv('../data/dataSet-Train.csv', encoding='utf-8')
+    for index, row in data.iterrows():
+        obj = {
+            "words": summary_transform(row[6]),
+        }
+        for category in categories:
+            obj[category] = "1" if category in row[5] else "0"
+
+        processed_list.append(obj)
+        display_percent(index, count, 'Preprocessing ')
+
+    out = pd.DataFrame(processed_list)
+    out.to_csv(out_path, encoding='utf-8')
+
+
+def preprocess_train(path="../data/data-grouped.csv"):
+    preprocess_file(in_path=path, out_path='../data/dataSet-Train.csv')
+

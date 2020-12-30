@@ -6,27 +6,42 @@ from sklearn.metrics import accuracy_score
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.pipeline import Pipeline
 
-data = pd.read_csv('../data/dataSet-Train.csv', encoding="utf-8")
-categories = ["Biography", "Comedy", "Detective Fiction", "Drama", "Fantasy", "Fiction", "Horror", "Nonfiction", "Romance", "Science Fiction", "Thriller"]
+from bin.constants import categories
 
-train, test = model_selection.train_test_split(data, test_size=0.2, random_state=42)
-X_train = train.words
-X_test = test.words
+text_clf = None
 
 
-# Building a pipeline
-text_clf = Pipeline([
-    ('vect', CountVectorizer()),
-    ('tfidf', TfidfTransformer()),
-    ('clf', OneVsRestClassifier(SGDClassifier())),
-])
+def train(path='../data/dataSet-Train.csv', printAccuracy=False):
+    global text_clf
+    data = pd.read_csv(path, encoding="utf-8")
 
-for category in categories:
-    print(category)
-    text_clf = text_clf.fit(X_train, train[category])
+    train, test = model_selection.train_test_split(data, test_size=0.2, random_state=42)
+    X_train = train.words
+    X_test = test.words
 
-    # Evaluation of the performance on the test set
-    predicted = text_clf.predict(X_test)
 
-    print("Accuracy : {}".format(accuracy_score(test[category], predicted)))
+    # Building a pipeline
+    text_clf = Pipeline([
+        ('vect', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('clf', OneVsRestClassifier(SGDClassifier())),
+    ])
 
+    for category in categories:
+        print(category)
+        text_clf = text_clf.fit(X_train, train[category])
+
+        # Evaluation of the performance on the test set
+        predicted = text_clf.predict(X_test)
+
+        print("Accuracy : {}".format(accuracy_score(test[category], predicted)))
+
+
+def predict(summaries):
+    global text_clf
+    if text_clf is None:
+        raise Exception("Untrained Neural Network")
+    predicted = {}
+    for category in categories:
+        predicted[category] = text_clf.predict(summaries)
+    return predicted
