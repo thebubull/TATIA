@@ -9,6 +9,7 @@ import sys
 data = pd.read_csv("../data/data-grouped.csv", encoding="utf-8")
 count = len(data.index)
 out_list = []
+categories = ["Biography", "Comedy", "Detective Fiction", "Drama", "Fantasy", "Fiction", "Horror", "Nonfiction", "Romance", "Science Fiction", "Thriller"]
 
 
 def display_percent(i):
@@ -39,10 +40,13 @@ for index, row in data.iterrows():
     stems = [porter.stem(word) for word in words]
     #print(tokens)
 
-    out_list.append({
+    obj = {
         "words": stems,
-        "genre": row[5].split(';')
-    })
+    }
+    for categorie in categories:
+        obj[categorie] = "1" if categorie in row[5] else "0"
+
+    out_list.append(obj)
     display_percent(index)
 
 out = pd.DataFrame(out_list)
