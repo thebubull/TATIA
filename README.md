@@ -12,5 +12,29 @@ Le parseur prend le fichier "bookssummaries.txt" et le convertit en csv dans le 
 - [X] Oui
 - [ ] Non
 
-## Reste
+## Preprocessing
 
+Récuperer les résumés et tokenise les mots.
+### Fini ?
+- [X] Oui
+- [ ] Non
+
+
+## Classifier
+
+Classifie les résumés suivant leurs genres : 
+- "Biography"
+- "Comedy"
+- "Detective Fiction"
+- "Drama"
+- "Fantasy"
+- "Fiction"
+- "Horror"
+- "Nonfiction"
+- "Romance"
+- "Science Fiction"
+- "Thriller"
+
+### Fini ?
+- [X] Oui
+- [ ] Non
