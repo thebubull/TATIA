@@ -6,7 +6,7 @@ groups = {}
 
 
 def read_groups():
-    with open("groups.csv", 'r', encoding="utf-8", newline='') as inFile:
+    with open("data/Groups.csv", 'r', encoding="utf-8", newline='') as inFile:
         csv_reader = csv.reader(inFile, delimiter=';')
         next(csv_reader, None)
         for row in csv_reader:
@@ -14,9 +14,9 @@ def read_groups():
 
 
 def wrap():
-    with open("data.csv", 'r', encoding="utf-8", newline='') as inFile:
-        with open("data-test.csv", 'w', encoding="utf-8") as testFile:
-            with open("data-grouped.csv", 'w', encoding="utf-8") as outFile:
+    with open("data/data.csv", 'r', encoding="utf-8", newline='') as inFile:
+        with open("data/data-test.csv", 'w', encoding="utf-8") as testFile:
+            with open("data/data-grouped.csv", 'w', encoding="utf-8") as outFile:
                 csv_reader = csv.reader(inFile, delimiter=',')
                 next(csv_reader, None)
                 test_writer = csv.writer(testFile, delimiter=',', lineterminator='\n')

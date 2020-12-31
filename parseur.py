@@ -3,7 +3,7 @@ import csv
 columnsNames = ["WikiID", "FreebaseID", "Title", "Author", "Date", "Book genres","Summary"]
 
 def parse():
-    with open("data.csv",'w',encoding="utf-8",newline = '') as data:
+    with open("data/data.csv",'w',encoding="utf-8",newline = '') as data:
         with open("booksummaries/booksummaries.txt",'r', encoding = "utf-8") as f_in:
             writer = csv.writer(data)
             writer.writerow(columnsNames)
