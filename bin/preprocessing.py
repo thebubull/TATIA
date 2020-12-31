@@ -1,10 +1,17 @@
+import string
+import sys
+
 import pandas as pd
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-import string
+from nltk.tokenize import word_tokenize
 
-from bin.constants import categories, display_percent
+
+def display_percent(current, total, prefix=""):
+    current_percent = current * 100 / total
+    sys.stdout.write("\r")
+    sys.stdout.write("%s[%-20s] %d%%" % (prefix, '='*int(current_percent/5), current_percent))
+    sys.stdout.flush()
 
 
 def summary_transform(summary):
@@ -23,7 +30,13 @@ def summary_transform(summary):
 
     # 5 - Stemming
     porter = PorterStemmer()
-    return [porter.stem(word) for word in words]
+    stem_sentence = ""
+    for word in words:
+        stem = porter.stem(word)
+        stem_sentence += stem
+        stem_sentence += " "
+    stem_sentence = stem_sentence.strip()
+    return stem_sentence
 
 
 def preprocess_file(in_path, out_path):
@@ -34,9 +47,8 @@ def preprocess_file(in_path, out_path):
     for index, row in data.iterrows():
         obj = {
             "words": summary_transform(row[6]),
+            "genres": row[5].split(";")
         }
-        for category in categories:
-            obj[category] = "1" if category in row[5] else "0"
 
         processed_list.append(obj)
         display_percent(index, count, 'Preprocessing ')
