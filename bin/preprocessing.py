@@ -39,7 +39,7 @@ def summary_transform(summary):
     return stem_sentence
 
 
-def preprocess_file(in_path, out_path):
+def preprocess_file(in_path, out_path, display_progress=False):
     data = pd.read_csv(in_path, encoding="utf-8")
     count = len(data.index) - 1
     processed_list = []
@@ -51,7 +51,8 @@ def preprocess_file(in_path, out_path):
         }
 
         processed_list.append(obj)
-        display_percent(index, count, 'Preprocessing ')
+        if display_progress:
+            display_percent(index, count, 'Preprocessing ')
 
     out = pd.DataFrame(processed_list)
     out.to_csv(out_path, encoding='utf-8')
